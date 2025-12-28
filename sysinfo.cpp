@@ -286,7 +286,7 @@ int main() {
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
     system((string_replace_all(filename_path(get_executable_path()) + std::string("filedialogs.exe"), " ", "^ ") + std::string(" --show-message ") + 
-    string_replace_all(string_replace_all(text, " ", "^ "), "\n", "^\r\n") + std::string(" > NUL")).c_str());
+    text + std::string(" > NUL")).c_str());
   }
   #else
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
@@ -300,6 +300,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
