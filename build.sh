@@ -1,7 +1,7 @@
 #!/bin/sh
 cd "${0%/*}";
 xxd -i pci.ids > pci.ids.hpp;
-git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs && chmod 755 libfiledialogs/build.sh && libfiledialogs/build.sh;
+rm -fr libfiledialogs && git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs && chmod 755 libfiledialogs/build.sh && libfiledialogs/build.sh;
 if [ $(uname) = "Darwin" ]; then
   cp -fr libfiledialogs/filedialogs/filedialogs filedialogs;
   clang++ sysinfo.cpp system.cpp shmem.mm -o sysinfo -std=c++17 -fPIC -framework Cocoa -framework CoreGraphics -framework Metal -framework Foundation -mmacos-version-min=10.13 -arch x86_64 -arch arm64;
