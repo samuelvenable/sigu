@@ -298,10 +298,11 @@ int main() {
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs") {
     system((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") + 
-    string_replace_all(text, "\"", "\\\"") + std::string("\" > /dev/null")).c_str());
+    string_replace_all(text, "\"", "\\\"") + std::string("\"")).c_str());
   }
   #endif
 }
+
 
 
 
