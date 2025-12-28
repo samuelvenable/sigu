@@ -288,7 +288,16 @@ int main() {
     STARTUPINFOW si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); 
     ZeroMemory(&pi, sizeof(pi)); std::wstring program = widen(std::string("\"") + filename_path(get_executable_path()) + 
     std::string("filedialogs\" --show-message \"") + string_replace_all(text, "\"", "\\\"") + std::string("\""));
-    CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi);
+    if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
+      MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
+        }
+      }
+      CloseHandle(pi.hProcess);
+      CloseHandle(pi.hThread);
+    }
   }
   #else
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
@@ -302,3 +311,4 @@ int main() {
   }
   #endif
 }
+
