@@ -287,7 +287,7 @@ int main() {
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
     system((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs.exe\" --show-message \"") + 
     string_replace_all(text, "\"", "\\\"") + 
-    std::string("\" > NUL")).c_str());
+    std::string("\"")).c_str());
   }
   #else
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
@@ -298,7 +298,7 @@ int main() {
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs") {
     system((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") + 
     string_replace_all(text, "\"", "\\\"") + 
-    std::string("\" > /dev/null")).c_str());
+    std::string("\"")).c_str());
   }
   #endif
 }
