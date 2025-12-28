@@ -284,9 +284,11 @@ int main() {
   SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1080");
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
-  if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
-    system((string_replace_all(filename_path(get_executable_path()) + std::string("filedialogs.exe"), " ", "^ ") + std::string(" --show-message ") + 
-    text + std::string(" > NUL")).c_str());
+  if (get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
+    STARTUPINFO si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi));
+    std::wstring program = widen(std::string("C:\\Windows\\System32\\cmd.exe /c \"") + filename_path(get_executable_path()) + 
+    std::string("filedialogs\" --show-message \"") + string_replace_all(text, "\"", "\\\"") + std::string("\" > NUL"));
+    CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)
   }
   #else
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
@@ -300,6 +302,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
