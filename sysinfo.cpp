@@ -285,7 +285,7 @@ int main() {
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
-    STARTUPINFO si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi));
+    STARTUPINFOW si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi));
     std::wstring program = widen(std::string("C:\\Windows\\System32\\cmd.exe /c \"") + filename_path(get_executable_path()) + 
     std::string("filedialogs\" --show-message \"") + string_replace_all(text, "\"", "\\\"") + std::string("\" > NUL"));
     CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi);
@@ -302,6 +302,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
