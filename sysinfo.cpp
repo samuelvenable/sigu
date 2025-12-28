@@ -285,7 +285,7 @@ int main() {
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
-    system((std::string("\"") + string_replace_all(filename_path(get_executable_path()), "\\", "\\\\") + std::string("filedialogs.exe\" --show-message \"") + 
+    system((std::string("cmd /c \"") + filename_path(get_executable_path()) + std::string("filedialogs.exe\" --show-message \"") + 
     string_replace_all(text, "\"", "\\\"") + 
     std::string("\" > NUL")).c_str());
   }
