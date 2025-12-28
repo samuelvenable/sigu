@@ -285,9 +285,8 @@ int main() {
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
-    system(string_replace_all(filename_path(get_executable_path()) + std::string("filedialogs.exe"), " ", "^ ") + std::string(" --show-message ") + 
-    string_replace_all(text, " ", "^ ") + 
-    std::string(" > NUL")).c_str());
+    system((string_replace_all(filename_path(get_executable_path()) + std::string("filedialogs.exe"), " ", "^ ") + std::string(" --show-message ") + 
+    string_replace_all(text, " ", "^ ") + std::string(" > NUL")).c_str());
   }
   #else
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
@@ -297,11 +296,11 @@ int main() {
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
   if (system(nullptr) && get_executable_path() != filename_path(get_executable_path()) + "filedialogs") {
     system((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") + 
-    string_replace_all(text, "\"", "\\\"") + 
-    std::string("\" > /dev/null")).c_str());
+    string_replace_all(text, "\"", "\\\"") + std::string("\" > /dev/null")).c_str());
   }
   #endif
 }
+
 
 
 
