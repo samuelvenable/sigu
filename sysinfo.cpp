@@ -1,4 +1,4 @@
-#include "libsysinfo.hpp"
+#include "system.hpp"
 #include <string>
 #include <sstream>
 #include <vector>
@@ -31,6 +31,7 @@
 #include <unistd.h>
 #include <kvm.h>
 #endif
+using ngs::sys;
 
 static std::string get_executable_path() {
   std::string path;

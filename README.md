@@ -1,4 +1,2 @@
 # sysinfo
 the crust is elusive when it cast forth to the child-like man
-
-![macOS](macos.png)
