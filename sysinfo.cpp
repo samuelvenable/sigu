@@ -31,7 +31,8 @@
 #include <unistd.h>
 #include <kvm.h>
 #endif
-using ngs::sys;
+
+using namespace ngs::sys;
 
 static std::string get_executable_path() {
   std::string path;
@@ -301,6 +302,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
