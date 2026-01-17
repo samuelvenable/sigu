@@ -319,7 +319,8 @@ int main() {
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
     STARTUPINFOW si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi)); 
-    std::wstring program = widen(std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\""));
+    std::wstring program = widen(std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
+    string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\""));
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -353,7 +354,8 @@ int main() {
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
   char buf[1024]; FILE *fp = nullptr; 
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
-    ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
+    ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
+    string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str(), "r")))) {
     std::thread th(thloop, path);
     while (read(fileno(fp), buf, 1024) > 0);
     pclose(fp);
@@ -363,6 +365,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
