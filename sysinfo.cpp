@@ -3,6 +3,8 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <thread>
+#include <chrono>
 #if defined(_WIN32)
 #include <windows.h>
 #else
@@ -300,8 +302,9 @@ int main() {
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-          std::wstring wtext = widen(SYSINFO);
-          outfile << wtext << std::endl;
+          std::wstring WSYSINFO = widen(SYSINFO);
+          outfile << WSYSINFO << std::endl;
+          std::this_thread::sleep_for(std::chrono::milliseconds(500));
           TranslateMessage(&msg);
           DispatchMessage(&msg);
         }
@@ -323,12 +326,14 @@ int main() {
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
     while ((nRead = read(fileno(fp), buf, 1024)) > 0) {
       outfile << SYSINFO << std::endl;
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
     pclose(fp);
     outfile.close();
   }
   #endif
 }
+
 
 
 
