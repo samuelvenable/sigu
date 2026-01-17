@@ -307,8 +307,6 @@ int main() {
             std::wstring WSYSINFO = widen(SYSINFO);
             outfile << WSYSINFO << std::endl;
             outfile.close();
-            DeleteFileW(path.c_str());
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
           }
           TranslateMessage(&msg);
           DispatchMessage(&msg);
@@ -334,14 +332,13 @@ int main() {
       if (outfile.is_open()) {
         outfile << SYSINFO << std::endl;
         outfile.close();
-        unlink(path.c_str());
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
       }
     }
     pclose(fp);
   }
   #endif
 }
+
 
 
 
