@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <chrono>
+#include <atomic>
 #if defined(_WIN32)
 #include <windows.h>
 #else
@@ -275,8 +276,10 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 }
 
 #if !defined(_WIN32)
+std::atomic_bool stop_thread = false;
 void thloop(std::string path) {
-  std::ofstream outfile(path, std::ios::trunc);
+  while (!stop_thread) {
+    std::ofstream outfile(path, std::ios::trunc);
     if (outfile.is_open()) {
       outfile << SYSINFO << std::endl;
       outfile.close();
@@ -349,13 +352,16 @@ int main() {
   char buf[1024]; FILE *fp = nullptr; 
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
-    std::thread th(thloop, path)
+    std::thread th(thloop, path);
     while (read(fileno(fp), buf, 1024) > 0);
     pclose(fp);
+    stop_thread = true;
     th.join();
+    stop_thread = false;
   }
   #endif
 }
+
 
 
 
