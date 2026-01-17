@@ -274,6 +274,17 @@ static std::string string_replace_all(std::string str, std::string substr, std::
   return str;
 }
 
+#if !defined(_WIN32)
+void thloop(std::string path) {
+  std::ofstream outfile(path, std::ios::trunc);
+    if (outfile.is_open()) {
+      outfile << SYSINFO << std::endl;
+      outfile.close();
+    }
+  }
+}
+#endif
+
 int main() {
   #if defined(_WIN32)
   auto widen = [](std::string str) {
@@ -323,14 +334,6 @@ int main() {
     }
   }
   #else
-  auto thloop = []() {
-    std::ofstream outfile(path, std::ios::trunc);
-      if (outfile.is_open()) {
-        outfile << SYSINFO << std::endl;
-        outfile.close();
-      }
-    }
-  };
   std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
   std::ofstream outfile(path, std::ios::trunc);
   if (outfile.is_open()) {
@@ -346,13 +349,14 @@ int main() {
   char buf[1024]; FILE *fp = nullptr; 
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
-    std::thread th(thloop)
+    std::thread th(thloop, path)
     while (read(fileno(fp), buf, 1024) > 0);
     pclose(fp);
     th.join();
   }
   #endif
 }
+
 
 
 
