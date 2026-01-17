@@ -275,7 +275,6 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 }
 
 int main() {
-  std::string init = SYSINFO;
   #if defined(_WIN32)
   auto widen = [](std::string str) {
     if (str.empty()) return std::wstring(L"");
@@ -283,12 +282,6 @@ int main() {
     std::vector<wchar_t> buf(wchar_count);
     return std::wstring{ buf.data(), (std::size_t)MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, buf.data(), (int)wchar_count) };
   };
-  std::wstring dname = widen(filename_path(get_executable_path())); 
-  SetCurrentDirectoryW(dname.c_str());
-  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1024");
-  SetEnvironmentVariableW(L"IMGUI_DIALOG_HEIGHT", L"768");
-  SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
-  SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   std::wstring path; DWORD length = 0;
   if ((length = GetEnvironmentVariableW(L"USERPROFILE", nullptr, 0))) {
     wchar_t *buffer = new wchar_t[length]();
@@ -297,6 +290,18 @@ int main() {
     }
     delete[] buffer;
   }
+  std::wofstream outfile(path, std::ios::trunc);
+  if (outfile.is_open()) {
+    std::wstring WSYSINFO = widen(SYSINFO);
+    outfile << WSYSINFO << std::endl;
+    outfile.close();
+  }
+  std::wstring dname = widen(filename_path(get_executable_path())); 
+  SetCurrentDirectoryW(dname.c_str());
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1024");
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_HEIGHT", L"768");
+  SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
+  SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
     STARTUPINFOW si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi)); 
     std::wstring program = widen(std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\""));
@@ -318,13 +323,18 @@ int main() {
     }
   }
   #else
+  std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
+  std::ofstream outfile(path, std::ios::trunc);
+  if (outfile.is_open()) {
+    outfile << SYSINFO << std::endl;
+    outfile.close();
+  }
   setenv("IMGUI_DIALOG_WIDTH", "1024", 1);
   setenv("IMGUI_DIALOG_HEIGHT", "768", 1);
   setenv("IMGUI_FONT_FILES", "fonts/BBHHegarty-Regular.ttf", 1);
   setenv("IMGUI_FONT_SIZE", "24", 1);
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
-  std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
   char buf[1024]; ssize_t nRead = 0; FILE *fp = nullptr; 
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
@@ -339,6 +349,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
