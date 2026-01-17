@@ -284,7 +284,8 @@ int main() {
   };
   std::wstring dname = widen(filename_path(get_executable_path())); 
   SetCurrentDirectoryW(dname.c_str());
-  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1080");
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1024");
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_HEIGHT", L"768");
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   std::wstring path; DWORD length = 0;
@@ -306,6 +307,7 @@ int main() {
             std::wstring WSYSINFO = widen(SYSINFO);
             outfile << WSYSINFO << std::endl;
             outfile.close();
+            DeleteFileW(path.c_str());
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
           }
           TranslateMessage(&msg);
@@ -317,7 +319,8 @@ int main() {
     }
   }
   #else
-  setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
+  setenv("IMGUI_DIALOG_WIDTH", "1024", 1);
+  setenv("IMGUI_DIALOG_HEIGHT", "768", 1);
   setenv("IMGUI_FONT_FILES", "fonts/BBHHegarty-Regular.ttf", 1);
   setenv("IMGUI_FONT_SIZE", "24", 1);
   chdir(filename_path(get_executable_path()).c_str());
@@ -331,6 +334,7 @@ int main() {
       if (outfile.is_open()) {
         outfile << SYSINFO << std::endl;
         outfile.close();
+        unlink(path.c_str());
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
       }
     }
@@ -338,6 +342,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
