@@ -275,6 +275,7 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 }
 
 int main() {
+  std::string init = SYSINFO;
   #if defined(_WIN32)
   auto widen = [](std::string str) {
     if (str.empty()) return std::wstring(L"");
@@ -338,6 +339,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
