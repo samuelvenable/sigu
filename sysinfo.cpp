@@ -318,9 +318,9 @@ int main() {
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
   std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
-  char buf[1024]; ssize_t nRead = 0; std::ofstream outfile(path, std::ios::trunc); 
+  char buf[1024]; ssize_t nRead = 0; FILE *fp = nullptr; std::ofstream outfile(path, std::ios::trunc); 
   if (outfile.is_open() && !get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
-    (FILE *fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r"))) {
+    ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
     while ((nRead = read(fileno(fp), buf, 1024)) > 0) {
       outfile << SYSINFO << std::endl;
     }
@@ -329,6 +329,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
