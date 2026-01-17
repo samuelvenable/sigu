@@ -279,6 +279,7 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 std::atomic_bool stop_thread = false;
 void thloop(std::string path) {
   while (!stop_thread) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::ofstream outfile(path, std::ios::trunc);
     if (outfile.is_open()) {
       outfile << SYSINFO << std::endl;
@@ -324,6 +325,7 @@ int main() {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
           std::wofstream outfile(path, std::ios::trunc);
           if (outfile.is_open()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
             std::wstring WSYSINFO = widen(SYSINFO);
             outfile << WSYSINFO << std::endl;
             outfile.close();
@@ -361,6 +363,7 @@ int main() {
   }
   #endif
 }
+
 
 
 
