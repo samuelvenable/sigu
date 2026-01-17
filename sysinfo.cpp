@@ -295,16 +295,19 @@ int main() {
     }
     delete[] buffer;
   }
-  std::wofstream outfile(path, std::ios::trunc); 
-  if (outfile.is_open() && !get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
+  if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
     STARTUPINFOW si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi)); 
     std::wstring program = widen(std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\""));
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-          std::wstring WSYSINFO = widen(SYSINFO);
-          outfile << WSYSINFO << std::endl;
-          std::this_thread::sleep_for(std::chrono::milliseconds(500));
+          std::wofstream outfile(path, std::ios::trunc);
+          if (outfile.is_open()) {
+            std::wstring WSYSINFO = widen(SYSINFO);
+            outfile << WSYSINFO << std::endl;
+            outfile.close();
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+          }
           TranslateMessage(&msg);
           DispatchMessage(&msg);
         }
@@ -312,7 +315,6 @@ int main() {
       CloseHandle(pi.hProcess);
       CloseHandle(pi.hThread);
     }
-    outfile.close();
   }
   #else
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
@@ -321,18 +323,22 @@ int main() {
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
   std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
-  char buf[1024]; ssize_t nRead = 0; FILE *fp = nullptr; std::ofstream outfile(path, std::ios::trunc); 
-  if (outfile.is_open() && !get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
+  char buf[1024]; ssize_t nRead = 0; FILE *fp = nullptr; 
+  if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"\"")).c_str(), "r")))) {
     while ((nRead = read(fileno(fp), buf, 1024)) > 0) {
-      outfile << SYSINFO << std::endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(500));
+      std::ofstream outfile(path, std::ios::trunc);
+      if (outfile.is_open()) {
+        outfile << SYSINFO << std::endl;
+        outfile.close();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+      }
     }
     pclose(fp);
-    outfile.close();
   }
   #endif
 }
+
 
 
 
