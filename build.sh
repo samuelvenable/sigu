@@ -1,6 +1,6 @@
 #!/bin/sh
 cd "${0%/*}";
-rm -fr pci.ids;
+rm -fr pci.ids pci.ids.hpp;
 curl --output pci.ids "https://pci-ids.ucw.cz/pci.ids";
 xxd -i pci.ids > pci.ids.hpp;
 rm -fr libfiledialogs && git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs && chmod 755 libfiledialogs/build.sh && libfiledialogs/build.sh;
