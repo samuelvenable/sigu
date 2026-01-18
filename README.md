@@ -1,5 +1,5 @@
 # System Information Graphical Utility (SIGU)
-the crust is elusive when it cast forth to the child-like man
+The crust is elusive when it cast forth to the child-like man!
 
 > # ***Prerequisites:***
 > 
