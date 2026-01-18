@@ -313,8 +313,7 @@ int main() {
   }
   std::wstring dname = widen(filename_path(get_executable_path())); 
   SetCurrentDirectoryW(dname.c_str());
-  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1024");
-  SetEnvironmentVariableW(L"IMGUI_DIALOG_HEIGHT", L"768");
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1080");
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
   SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
@@ -346,18 +345,17 @@ int main() {
     outfile << SYSINFO << std::endl;
     outfile.close();
   }
-  setenv("IMGUI_DIALOG_WIDTH", "1024", 1);
-  setenv("IMGUI_DIALOG_HEIGHT", "768", 1);
+  setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
   setenv("IMGUI_FONT_FILES", "fonts/BBHHegarty-Regular.ttf", 1);
   setenv("IMGUI_FONT_SIZE", "24", 1);
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
-  char buf[1024]; FILE *fp = nullptr; 
+  char buf[1080]; FILE *fp = nullptr; 
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
     string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str(), "r")))) {
     std::thread th(thloop, path);
-    while (read(fileno(fp), buf, 1024) > 0);
+    while (read(fileno(fp), buf, 1080) > 0);
     pclose(fp);
     stop_thread = true;
     th.join();
