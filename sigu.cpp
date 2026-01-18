@@ -101,7 +101,7 @@ static std::string narrow(std::wstring wstr) {
 static std::atomic_bool stop_thread = false;
 static void thloop(std::string path) {
   while (!stop_thread) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::ofstream outfile;
     outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
     if (outfile.is_open()) {
@@ -355,7 +355,7 @@ int main() {
         std::wofstream outfile;
         outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
         if (outfile.is_open()) {
-          std::this_thread::sleep_for(std::chrono::milliseconds(5));
+          std::this_thread::sleep_for(std::chrono::milliseconds(500));
           std::wstring WSYSINFO = widen(SYSINFO);
           outfile << WSYSINFO << std::endl;
           outfile.close();
@@ -395,4 +395,5 @@ int main() {
   }
   #endif
 }
+
 
