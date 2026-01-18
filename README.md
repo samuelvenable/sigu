@@ -1,7 +1,7 @@
 # sysinfo
 the crust is elusive when it cast forth to the child-like man
 
-> ***Prerequisites:***
+> # ***Prerequisites:***
 > 
 > **Windows:** git, xxd, MSYS2, MinGW, pacman, g++, make, pkg-config, sdl2
 > 
