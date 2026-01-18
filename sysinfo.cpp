@@ -350,12 +350,12 @@ int main() {
   setenv("IMGUI_FONT_SIZE", "24", 1);
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
-  char buf[1080]; FILE *fp = nullptr; 
+  char buf[1024]; FILE *fp = nullptr; 
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
     ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
     string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str(), "r")))) {
     std::thread th(thloop, path);
-    while (read(fileno(fp), buf, 1080) > 0);
+    while (read(fileno(fp), buf, 1024) > 0);
     pclose(fp);
     stop_thread = true;
     th.join();
