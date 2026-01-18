@@ -83,15 +83,38 @@ using namespace ngs::sys;
 ((gpu_renderer() != std::string("(null)")) ? (std::string("GPU RENDERER: ") + gpu_renderer() + std::string("\n")) : "") +\
 ((memory_totalvram(true) != std::string("(null)")) ? (std::string("GPU MEMORY: ") + memory_totalvram(true) + std::string("\n")) : "")
 
+#if defined(_WIN32)
+static std::wstring widen(std::string str) {
+  if (str.empty()) return std::wstring(L"");
+  std::size_t wchar_count = str.size() + 1;
+  std::vector<wchar_t> buf(wchar_count);
+  return std::wstring{ buf.data(), (std::size_t)MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, buf.data(), (int)wchar_count) };
+}
+
+static std::string narrow(std::wstring wstr) {
+  if (wstr.empty()) return std::string("");
+  int nbytes = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), nullptr, 0, nullptr, nullptr);
+  std::vector<char> buf(nbytes);
+  return std::string { buf.data(), (std::size_t)WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), buf.data(), nbytes, nullptr, nullptr) };
+}
+#else
+static std::atomic_bool stop_thread = false;
+static void thloop(std::string path) {
+  while (!stop_thread) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    std::ofstream outfile;
+    outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
+    if (outfile.is_open()) {
+      outfile << SYSINFO << std::endl;
+      outfile.close();
+    }
+  }
+}
+#endif
+
 static std::string get_executable_path() {
   std::string path;
   #if defined(_WIN32)
-  auto narrow = [](std::wstring wstr) {
-    if (wstr.empty()) return std::string("");
-    int nbytes = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), nullptr, 0, nullptr, nullptr);
-    std::vector<char> buf(nbytes);
-    return std::string { buf.data(), (std::size_t)WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), buf.data(), nbytes, nullptr, nullptr) };
-  };
   wchar_t buffer[MAX_PATH];
   if (GetModuleFileNameW(nullptr, buffer, sizeof(buffer)) != 0) {
     wchar_t exe[MAX_PATH];
@@ -301,29 +324,8 @@ static std::string string_replace_all(std::string str, std::string substr, std::
   return str;
 }
 
-#if !defined(_WIN32)
-std::atomic_bool stop_thread = false;
-void thloop(std::string path) {
-  while (!stop_thread) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    std::ofstream outfile;
-    outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
-    if (outfile.is_open()) {
-      outfile << SYSINFO << std::endl;
-      outfile.close();
-    }
-  }
-}
-#endif
-
 int main() {
   #if defined(_WIN32)
-  auto widen = [](std::string str) {
-    if (str.empty()) return std::wstring(L"");
-    std::size_t wchar_count = str.size() + 1;
-    std::vector<wchar_t> buf(wchar_count);
-    return std::wstring{ buf.data(), (std::size_t)MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, buf.data(), (int)wchar_count) };
-  };
   std::wstring path; DWORD length = 0;
   if ((length = GetEnvironmentVariableW(L"USERPROFILE", nullptr, 0))) {
     wchar_t *buffer = new wchar_t[length]();
@@ -350,15 +352,15 @@ int main() {
     string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\""));
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
+        std::wofstream outfile;
+        outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
+        if (outfile.is_open()) {
+          std::this_thread::sleep_for(std::chrono::milliseconds(5));
+          std::wstring WSYSINFO = widen(SYSINFO);
+          outfile << WSYSINFO << std::endl;
+          outfile.close();
+        }
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-          std::wofstream outfile;
-          outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
-          if (outfile.is_open()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            std::wstring WSYSINFO = widen(SYSINFO);
-            outfile << WSYSINFO << std::endl;
-            outfile.close();
-          }
           TranslateMessage(&msg);
           DispatchMessage(&msg);
         }
