@@ -331,7 +331,7 @@ int main() {
     }
     delete[] buffer;
   }
-  std::wofstream outfile(path, std::ios::trunc);
+  std::wofstream outfile(path, std::wios::trunc);
   if (outfile.is_open()) {
     std::wstring WSYSINFO = widen(SYSINFO);
     outfile << WSYSINFO << std::endl;
@@ -349,7 +349,7 @@ int main() {
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-          std::wofstream outfile(path, std::ios::trunc);
+          std::wofstream outfile(path, std::wios::trunc);
           if (outfile.is_open()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             std::wstring WSYSINFO = widen(SYSINFO);
