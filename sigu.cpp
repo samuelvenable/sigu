@@ -306,7 +306,8 @@ std::atomic_bool stop_thread = false;
 void thloop(std::string path) {
   while (!stop_thread) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    std::ofstream outfile(path, std::ios::trunc);
+    std::ofstream outfile;
+    outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
     if (outfile.is_open()) {
       outfile << SYSINFO << std::endl;
       outfile.close();
@@ -331,7 +332,8 @@ int main() {
     }
     delete[] buffer;
   }
-  std::wofstream outfile(path, std::wios::trunc);
+  std::wofstream outfile;
+  outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
   if (outfile.is_open()) {
     std::wstring WSYSINFO = widen(SYSINFO);
     outfile << WSYSINFO << std::endl;
@@ -349,7 +351,8 @@ int main() {
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-          std::wofstream outfile(path, std::wios::trunc);
+          std::wofstream outfile;
+          outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
           if (outfile.is_open()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             std::wstring WSYSINFO = widen(SYSINFO);
@@ -366,7 +369,8 @@ int main() {
   }
   #else
   std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
-  std::ofstream outfile(path, std::ios::trunc);
+  std::ofstream outfile;
+  outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
   if (outfile.is_open()) {
     outfile << SYSINFO << std::endl;
     outfile.close();
