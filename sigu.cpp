@@ -97,19 +97,6 @@ static std::string narrow(std::wstring wstr) {
   std::vector<char> buf(nbytes);
   return std::string { buf.data(), (std::size_t)WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), buf.data(), nbytes, nullptr, nullptr) };
 }
-#else
-static std::atomic_bool stop_thread = false;
-static void thloop(std::string path) {
-  while (!stop_thread) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    std::ofstream outfile;
-    outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
-    if (outfile.is_open()) {
-      outfile << SYSINFO << std::endl;
-      outfile.close();
-    }
-  }
-}
 #endif
 
 static std::string get_executable_path() {
@@ -326,21 +313,6 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 
 int main() {
   #if defined(_WIN32)
-  std::wstring path; DWORD length = 0;
-  if ((length = GetEnvironmentVariableW(L"USERPROFILE", nullptr, 0))) {
-    wchar_t *buffer = new wchar_t[length]();
-    if (GetEnvironmentVariableW(L"USERPROFILE", buffer, length)) {
-      path = std::wstring(buffer) + std::wstring(L"\\.config\\filedialogs\\message.txt");
-    }
-    delete[] buffer;
-  }
-  std::wofstream outfile;
-  outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
-  if (outfile.is_open()) {
-    std::wstring WSYSINFO = widen(SYSINFO);
-    outfile << WSYSINFO << std::endl;
-    outfile.close();
-  }
   std::wstring dname = widen(filename_path(get_executable_path())); 
   SetCurrentDirectoryW(dname.c_str());
   SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1080");
@@ -352,14 +324,6 @@ int main() {
     string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\""));
     if (CreateProcessW(nullptr, (wchar_t *)program.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
       MSG msg; while (WaitForSingleObject(pi.hProcess, INFINITE) != WAIT_OBJECT_0) {
-        std::wofstream outfile;
-        outfile.open(path.c_str(), std::wios::out | std::wios::trunc);
-        if (outfile.is_open()) {
-          std::this_thread::sleep_for(std::chrono::milliseconds(500));
-          std::wstring WSYSINFO = widen(SYSINFO);
-          outfile << WSYSINFO << std::endl;
-          outfile.close();
-        }
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
           TranslateMessage(&msg);
           DispatchMessage(&msg);
@@ -370,30 +334,17 @@ int main() {
     }
   }
   #else
-  std::string path = getenv("HOME") ? (getenv("HOME") + std::string("/.config/filedialogs/message.txt")) : "";
-  std::ofstream outfile;
-  outfile.open(path.c_str(), std::ios::out | std::ios::trunc);
-  if (outfile.is_open()) {
-    outfile << SYSINFO << std::endl;
-    outfile.close();
-  }
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
   setenv("IMGUI_FONT_FILES", "fonts/BBHHegarty-Regular.ttf", 1);
   setenv("IMGUI_FONT_SIZE", "24", 1);
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), 755);
-  char buf[1024]; FILE *fp = nullptr; 
-  if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs" && 
-    ((fp = popen((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
-    string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str(), "r")))) {
-    std::thread th(thloop, path);
-    while (read(fileno(fp), buf, 1024) > 0);
-    pclose(fp);
-    stop_thread = true;
-    th.join();
-    stop_thread = false;
+  if (system(nullptr) && !get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs") {
+    system((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
+    string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
   }
   #endif
 }
+
 
 
