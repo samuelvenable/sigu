@@ -32,13 +32,20 @@
 #include <thread>
 #include <chrono>
 #include <atomic>
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cerrno>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #if defined(_WIN32)
 #include <windows.h>
 #else
 #include <climits>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #endif
 #if (defined(__APPLE__) && defined(__MACH__))
 #include <sys/proc_info.h>
@@ -52,18 +59,14 @@
 #endif
 #endif
 #if defined(__OpenBSD__)
-#include <cstdio>
-#include <cerrno>
-#include <cstring>
 #include <cstddef>
-#include <sys/stat.h>
 #include <sys/sysctl.h>
-#include <unistd.h>
 #include <kvm.h>
 #endif
 
 using namespace ngs::sys;
 
+#define FIFO_NAME "IMGUI_DIALOG_PIPE"
 #define SYSINFO ((os_device_name() != std::string("(null)")) ? (std::string("OS DEVICE NAME: ") + os_device_name() + std::string("\n")) : "") +\
 ((os_product_name() != std::string("(null)")) ? (std::string("OS PRODUCT NAME: ") + os_product_name() + std::string("\n")) : "") +\
 ((os_kernel_name() != std::string("(null)")) ? (std::string("OS KERNEL NAME: ") + os_kernel_name() + std::string("\n")) : "") +\
@@ -82,6 +85,40 @@ using namespace ngs::sys;
 ((gpu_manufacturer() != std::string("(null)")) ? (std::string("GPU MANUFACTURER: ") + gpu_manufacturer() + std::string("\n")) : "") +\
 ((gpu_renderer() != std::string("(null)")) ? (std::string("GPU RENDERER: ") + gpu_renderer() + std::string("\n")) : "") +\
 ((memory_totalvram(true) != std::string("(null)")) ? (std::string("GPU MEMORY: ") + memory_totalvram(true) + std::string("\n")) : "")
+
+void string_send() {
+  #if defined(_WIN32)
+  const char *pipeName = R"(\\.\pipe\IMGUI_DIALOG_PIPE)";
+  HANDLE hPipe = CreateNamedPipeA(pipeName, PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_WAIT, 1, 0, 0, 0, nullptr);
+  if (hPipe == INVALID_HANDLE_VALUE) {
+    return;
+  }
+  bool connected = ConnectNamedPipe(hPipe, nullptr) ? true : (GetLastError() == ERROR_PIPE_CONNECTED);
+  if (!connected) {
+    CloseHandle(hPipe);
+    return;
+  }
+  DWORD bytesWritten = 0;
+  WriteFile(hPipe, std::string(SYSINFO).c_str(), (DWORD)std::string(SYSINFO).length() + 1, &bytesWritten, nullptr);
+  CloseHandle(hPipe);
+  #else
+  int fd = -1;
+  if (mkfifo(FIFO_NAME, 0666) == -1) {
+    if (errno != EEXIST) {
+      return;
+    }
+  }
+  fd = open(FIFO_NAME, O_WRONLY);
+  if (fd == -1) {
+    return;
+  }
+  if (write(fd, std::string(SYSINFO).c_str(), std::string(SYSINFO).length() + 1) == -1) {
+    close(fd);
+    return;
+  }
+  close(fd);
+  #endif
+}
 
 #if defined(_WIN32)
 static std::wstring widen(std::string str) {
@@ -311,7 +348,15 @@ static std::string string_replace_all(std::string str, std::string substr, std::
   return str;
 }
 
+static std::atomic_bool stop_thread = false;
+static void thloop() {
+  while (!stop_thread) {
+    string_send();
+  }
+}
+
 int main() {
+  std::thread th(thloop);
   #if defined(_WIN32)
   std::wstring dname = widen(filename_path(get_executable_path())); 
   SetCurrentDirectoryW(dname.c_str());
@@ -344,7 +389,8 @@ int main() {
     string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
   }
   #endif
+  stop_thread = true;
+  th.join();
+  stop_thread = false;
+  return 0;
 }
-
-
-
