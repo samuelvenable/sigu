@@ -64,7 +64,7 @@
 
 using namespace ngs::sys;
 
-#define FIFO_NAME "/tmp/IMGUI_DIALOG_PIPE"
+#define PIPE_NAME "/tmp/IMGUI_DIALOG_PIPE"
 #define SYSINFO std::string(((os_device_name() != std::string("(null)")) ? (std::string("OS DEVICE NAME: ") + os_device_name() + std::string("\n")) : "") +\
 ((os_product_name() != std::string("(null)")) ? (std::string("OS PRODUCT NAME: ") + os_product_name() + std::string("\n")) : "") +\
 ((os_kernel_name() != std::string("(null)")) ? (std::string("OS KERNEL NAME: ") + os_kernel_name() + std::string("\n")) : "") +\
@@ -97,31 +97,15 @@ void string_send() {
     return;
   }
   DWORD bytesWritten = 0;
-  WriteFile(hPipe, std::string(SYSINFO).c_str(), (DWORD)std::string(SYSINFO).length() + 1, &bytesWritten, nullptr);
+  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length(), &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
-  int fd = 0;
-  if (mkfifo(FIFO_NAME, 0666) != 0) {
-    if (errno != EEXIST) {
-      return;
-    }
+  std::fstream fs;
+  fs.open(PIPE_NAME, std::ios::out | std::ios::trunc);
+  if (fs.is_open()) {
+    fs << SYSINFO;
+    fs.close();
   }
-  fd = open(FIFO_NAME, O_WRONLY | O_NONBLOCK);
-  if (fd == -1) {
-    return;
-  }
-  for (int i = 0; i < 5; i++) {
-    ssize_t bytes_written = write(fd, std::string(SYSINFO).c_str(), std::string(SYSINFO).length() + 1);
-    if (bytes_written == -1) {
-      if (errno == EAGAIN || errno == EWOULDBLOCK) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-      } else {
-        break;
-      }
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-  }
-  close(fd);
   #endif
 }
 
@@ -356,6 +340,7 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 static std::atomic_bool stop_thread = false;
 static void thloop() {
   while (!stop_thread) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     string_send();
   }
 }
