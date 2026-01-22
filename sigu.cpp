@@ -340,8 +340,8 @@ static std::string string_replace_all(std::string str, std::string substr, std::
 static std::atomic_bool stop_thread = false;
 static void thloop() {
   while (!stop_thread) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     string_send();
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
 }
 
@@ -384,6 +384,7 @@ int main() {
   stop_thread = false;
   return 0;
 }
+
 
 
 
