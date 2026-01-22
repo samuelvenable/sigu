@@ -32,7 +32,6 @@
 #include <thread>
 #include <chrono>
 #include <atomic>
-
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -41,7 +40,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
 #if defined(_WIN32)
 #include <windows.h>
 #else
@@ -394,3 +392,4 @@ int main() {
   stop_thread = false;
   return 0;
 }
+
