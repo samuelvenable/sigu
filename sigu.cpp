@@ -64,7 +64,7 @@
 
 using namespace ngs::sys;
 
-#define FIFO_NAME "IMGUI_DIALOG_PIPE"
+#define FIFO_NAME "/tmp/IMGUI_DIALOG_PIPE"
 #define SYSINFO ((os_device_name() != std::string("(null)")) ? (std::string("OS DEVICE NAME: ") + os_device_name() + std::string("\n")) : "") +\
 ((os_product_name() != std::string("(null)")) ? (std::string("OS PRODUCT NAME: ") + os_product_name() + std::string("\n")) : "") +\
 ((os_kernel_name() != std::string("(null)")) ? (std::string("OS KERNEL NAME: ") + os_kernel_name() + std::string("\n")) : "") +\
@@ -392,5 +392,6 @@ int main() {
   stop_thread = false;
   return 0;
 }
+
 
 
