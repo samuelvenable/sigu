@@ -64,7 +64,6 @@
 
 using namespace ngs::sys;
 
-#define PIPE_NAME "/tmp/IMGUI_DIALOG_PIPE"
 #define SYSINFO std::string(((os_device_name() != std::string("(null)")) ? (std::string("OS DEVICE NAME: ") + os_device_name() + std::string("\n")) : "") +\
 ((os_product_name() != std::string("(null)")) ? (std::string("OS PRODUCT NAME: ") + os_product_name() + std::string("\n")) : "") +\
 ((os_kernel_name() != std::string("(null)")) ? (std::string("OS KERNEL NAME: ") + os_kernel_name() + std::string("\n")) : "") +\
@@ -82,7 +81,7 @@ using namespace ngs::sys;
 ((memory_freeswap(true) != std::string("(null)")) ? (std::string("SWAP MEMORY FREE: ") + memory_freeswap(true) + std::string("\n")) : "") +\
 ((gpu_manufacturer() != std::string("(null)")) ? (std::string("GPU MANUFACTURER: ") + gpu_manufacturer() + std::string("\n")) : "") +\
 ((gpu_renderer() != std::string("(null)")) ? (std::string("GPU RENDERER: ") + gpu_renderer() + std::string("\n")) : "") +\
-((memory_totalvram(true) != std::string("(null)")) ? (std::string("GPU MEMORY: ") + memory_totalvram(true) + std::string("\n")) : "")).substr(0, 4095)
+((memory_totalvram(true) != std::string("(null)")) ? (std::string("GPU MEMORY: ") + memory_totalvram(true) + std::string("\n")) : ""))
 
 void string_send() {
   #if defined(_WIN32)
@@ -97,11 +96,11 @@ void string_send() {
     return;
   }
   DWORD bytesWritten = 0;
-  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length(), &bytesWritten, nullptr);
+  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length() + 1, &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
   std::fstream fs;
-  fs.open(PIPE_NAME, std::ios::out | std::ios::trunc);
+  fs.open("/tmp/IMGUI_DIALOG_PIPE", std::ios::out | std::ios::trunc);
   if (fs.is_open()) {
     fs << SYSINFO;
     fs.close();
@@ -385,7 +384,8 @@ int main() {
   th.join();
   stop_thread = false;
   #if !defined(_WIN32)
-  unlink(PIPE_NAME);
+  unlink("/tmp/IMGUI_DIALOG_PIPE");
   #endif
   return 0;
 }
+
