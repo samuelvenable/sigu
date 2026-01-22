@@ -100,8 +100,8 @@ void string_send() {
   WriteFile(hPipe, std::string(SYSINFO).c_str(), (DWORD)std::string(SYSINFO).length() + 1, &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
-  int fd = -1;
-  if (mkfifo(FIFO_NAME, 0666) == -1) {
+  int fd = 0;
+  if (mkfifo(FIFO_NAME, 0666) != 0) {
     if (errno != EEXIST) {
       return;
     }
@@ -389,6 +389,7 @@ int main() {
   stop_thread = false;
   return 0;
 }
+
 
 
 
