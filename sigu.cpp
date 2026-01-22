@@ -106,7 +106,7 @@ void string_send() {
       return;
     }
   }
-  fd = open(FIFO_NAME, O_WRONLY | O_NONBLOCK);
+  fd = open(FIFO_NAME, O_WRONLY);
   if (fd == -1) {
     return;
   }
@@ -389,6 +389,7 @@ int main() {
   stop_thread = false;
   return 0;
 }
+
 
 
 
