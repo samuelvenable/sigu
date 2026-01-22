@@ -341,7 +341,9 @@ static std::atomic_bool stop_thread = false;
 static void thloop() {
   while (!stop_thread) {
     string_send();
+    #if !defined(_WIN32)
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    #endif
   }
 }
 
@@ -387,4 +389,5 @@ int main() {
   #endif
   return 0;
 }
+
 
