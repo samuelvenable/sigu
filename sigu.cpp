@@ -106,11 +106,21 @@ void string_send() {
       return;
     }
   }
-  fd = open(FIFO_NAME, O_WRONLY);
+  fd = open(FIFO_NAME, O_WRONLY | O_NONBLOCK);
   if (fd == -1) {
     return;
   }
-  write(fd, std::string(SYSINFO).c_str(), std::string(SYSINFO).length() + 1);
+  for (int i = 0; i < 5; i++) {
+    ssize_t bytes_written = write(fd, std::string(SYSINFO).c_str(), std::string(SYSINFO).length() + 1);
+    if (bytes_written == -1) {
+      if (errno == EAGAIN || errno == EWOULDBLOCK) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      } else {
+        break;
+      }
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
   close(fd);
   #endif
 }
