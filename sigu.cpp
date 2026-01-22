@@ -382,5 +382,9 @@ int main() {
   stop_thread = true;
   th.join();
   stop_thread = false;
+  #if !defined(_WIN32)
+  unlink(PIPE_NAME);
+  #endif
   return 0;
 }
+
