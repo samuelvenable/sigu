@@ -110,10 +110,7 @@ void string_send() {
   if (fd == -1) {
     return;
   }
-  if (write(fd, std::string(SYSINFO).c_str(), std::string(SYSINFO).length() + 1) == -1) {
-    close(fd);
-    return;
-  }
+  write(fd, std::string(SYSINFO).c_str(), std::string(SYSINFO).length() + 1) == -1);
   close(fd);
   #endif
 }
@@ -392,6 +389,7 @@ int main() {
   stop_thread = false;
   return 0;
 }
+
 
 
 
