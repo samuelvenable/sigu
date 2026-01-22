@@ -384,15 +384,3 @@ int main() {
   stop_thread = false;
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
