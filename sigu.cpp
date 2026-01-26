@@ -96,7 +96,7 @@ void string_send() {
     return;
   }
   DWORD bytesWritten = 0;
-  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length() + 1, &bytesWritten, nullptr);
+  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.size() + 1, &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
   int fd = 0;
@@ -109,7 +109,7 @@ void string_send() {
   if (fd == -1) {
     return;
   }
-  write(fd, SYSINFO.c_str(), SYSINFO.length() + 1);
+  write(fd, SYSINFO.c_str(), SYSINFO.size() + 1);
   close(fd);
   #endif
 }
@@ -394,5 +394,3 @@ int main() {
   #endif
   return 0;
 }
-
-
