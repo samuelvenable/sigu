@@ -99,12 +99,18 @@ void string_send() {
   WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length() + 1, &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
-  std::fstream fs;
-  fs.open("/tmp/IMGUI_DIALOG_PIPE", std::ios::out | std::ios::trunc);
-  if (fs.is_open()) {
-    fs << SYSINFO;
-    fs.close();
+  int fd = 0;
+  if (mkfifo("/tmp/IMGUI_DIALOG_PIPE", 0666) != 0) {
+    if (errno != EEXIST) {
+      return;
+    }
   }
+  fd = open("/tmp/IMGUI_DIALOG_PIPE", O_WRONLY);
+  if (fd == -1) {
+    return;
+  }
+  write(fd, SYSINFO.c_str(), SYSINFO.length() + 1);
+  close(fd);
   #endif
 }
 
@@ -388,4 +394,5 @@ int main() {
   #endif
   return 0;
 }
+
 
