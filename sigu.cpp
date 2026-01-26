@@ -95,7 +95,7 @@ void string_send() {
     return;
   }
   DWORD bytesWritten = 0;
-  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)((SYSINFO.length() * 2) + 1), &bytesWritten, nullptr);
+  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length() + 1, &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
   int fd = 0;
@@ -393,6 +393,7 @@ int main() {
   #endif
   return 0;
 }
+
 
 
 
