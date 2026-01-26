@@ -85,7 +85,7 @@ using namespace ngs::sys;
 void string_send() {
   #if defined(_WIN32)
   const char *pipeName = R"(\\.\pipe\IMGUI_DIALOG_PIPE)";
-  HANDLE hPipe = CreateNamedPipeA(pipeName, PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_WAIT, 1, 0, 0, 0, nullptr);
+  HANDLE hPipe = CreateNamedPipeA(pipeName, PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_NOWAIT, 1, 0, 0, 0, nullptr);
   if (hPipe == INVALID_HANDLE_VALUE) {
     return;
   }
@@ -95,7 +95,7 @@ void string_send() {
     return;
   }
   DWORD bytesWritten = 0;
-  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)SYSINFO.length() + 1, &bytesWritten, nullptr);
+  WriteFile(hPipe, SYSINFO.c_str(), (DWORD)((SYSINFO.length() * 2) + 1), &bytesWritten, nullptr);
   CloseHandle(hPipe);
   #else
   int fd = 0;
@@ -393,4 +393,5 @@ int main() {
   #endif
   return 0;
 }
+
 
