@@ -24,3 +24,5 @@ The crust is elusive when it casts forth to the child-like man!
 ![macos](macos.png)
 
 ![linux](linux.png)
+
+![freebsd](freebsd.png)
