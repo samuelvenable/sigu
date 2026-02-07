@@ -356,6 +356,7 @@ int main() {
   #if defined(_WIN32)
   std::wstring dname = widen(filename_path(get_executable_path())); 
   SetCurrentDirectoryW(dname.c_str());
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_CAPTION", L"About this Computer");
   SetEnvironmentVariableW(L"IMGUI_DIALOG_PARENT", L"");
   SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1080");
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/BBHHegarty-Regular.ttf");
@@ -376,6 +377,7 @@ int main() {
     }
   }
   #else
+  setenv("IMGUI_DIALOG_CAPTION", "About this Computer", 1);
   setenv("IMGUI_DIALOG_PARENT", "", 1);
   setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
   setenv("IMGUI_FONT_FILES", "fonts/BBHHegarty-Regular.ttf", 1);
