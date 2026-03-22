@@ -82,10 +82,15 @@ using namespace ngs::sys;
 ((gpu_renderer() != std::string("(null)")) ? (std::string("GPU RENDERER: ") + gpu_renderer() + std::string("\n")) : "") +\
 ((memory_totalvram(true) != std::string("(null)")) ? (std::string("GPU MEMORY: ") + memory_totalvram(true) + std::string("\n")) : ""))
 
+static std::string ppidenv;
+static std::string pipeName;
+
 void string_send() {
   #if defined(_WIN32)
-  const char *pipeName = R"(\\.\pipe\IMGUI_DIALOG_PIPE)";
-  HANDLE hPipe = CreateNamedPipeA(pipeName, PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_NOWAIT, 1, 0, 0, 0, nullptr);
+  ppidenv = std::to_string(GetCurrentProcessId());
+  SetEnvironmentVariableA("IMGUI_DIALOG_PPID", ppidenv.c_str());
+  pipeName = std::string("\\\\.\\pipe\\IMGUI_DIALOG_PIPE_") + ppidenv;
+  HANDLE hPipe = CreateNamedPipeA(pipeName.c_str(), PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_NOWAIT, 1, 0, 0, 0, nullptr);
   if (hPipe == INVALID_HANDLE_VALUE) {
     return;
   }
@@ -99,12 +104,15 @@ void string_send() {
   CloseHandle(hPipe);
   #else
   int fd = 0;
-  if (mkfifo("/tmp/IMGUI_DIALOG_PIPE", 0666) != 0) {
+  ppidenv = std::to_string(getpid());
+  setenv("IMGUI_DIALOG_PPID", ppidenv.c_str(), 1);
+  pipeName = std::string("/tmp/IMGUI_DIALOG_PIPE_") + ppidenv;
+  if (mkfifo(pipeName.c_str(), 0666) != 0) {
     if (errno != EEXIST) {
       return;
     }
   }
-  fd = open("/tmp/IMGUI_DIALOG_PIPE", O_WRONLY);
+  fd = open(pipeName.c_str(), O_WRONLY);
   if (fd == -1) {
     return;
   }
@@ -393,7 +401,7 @@ int main() {
   th.join();
   stop_thread = false;
   #if !defined(_WIN32)
-  unlink("/tmp/IMGUI_DIALOG_PIPE");
+  unlink(pipeName.c_str());
   #endif
   return 0;
 }
