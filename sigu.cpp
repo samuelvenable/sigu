@@ -366,9 +366,9 @@ int main() {
   SetCurrentDirectoryW(dname.c_str());
   SetEnvironmentVariableW(L"IMGUI_DIALOG_CAPTION", L"About this Computer");
   SetEnvironmentVariableW(L"IMGUI_DIALOG_PARENT", L"");
-  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"1080");
+  SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"800");
   SetEnvironmentVariableW(L"IMGUI_FONT_FILES", L"fonts/Roboto-Medium.ttf");
-  SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"24");
+  SetEnvironmentVariableW(L"IMGUI_FONT_SIZE", L"20");
   if (!get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs.exe") {
     STARTUPINFOW si; PROCESS_INFORMATION pi; ZeroMemory(&si, sizeof(si)); si.cb = sizeof(si); ZeroMemory(&pi, sizeof(pi)); 
     std::wstring program = widen(std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
@@ -387,9 +387,9 @@ int main() {
   #else
   setenv("IMGUI_DIALOG_CAPTION", "About this Computer", 1);
   setenv("IMGUI_DIALOG_PARENT", "", 1);
-  setenv("IMGUI_DIALOG_WIDTH", "1080", 1);
+  setenv("IMGUI_DIALOG_WIDTH", "800", 1);
   setenv("IMGUI_FONT_FILES", "fonts/Roboto-Medium.ttf", 1);
-  setenv("IMGUI_FONT_SIZE", "24", 1);
+  setenv("IMGUI_FONT_SIZE", "20", 1);
   chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), S_IRWXU);
   if (system(nullptr) && !get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs") {
