@@ -1,6 +1,4 @@
 # System Information Graphical Utility (SIGU)
-The crust is elusive when it casts forth to the child-like man!
-
 Supports Windows, macOS, Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, and SunOS.
 
 **Build Dependencies:**
