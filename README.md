@@ -1,6 +1,6 @@
 # System Information Graphical Utility (SIGU)
 
-Welcome to SIGU, the System Information Graphical Utility! With this small tool you can get the following information from your system: OS Device Name, OS Product Name, OS Kernel Name, OS Kernel Release, OS Architecture, CPU Processor, CPU Vendor, CPU Core Count, CPU Processor Count, Random-Access Memory Total/Used/Free, Swap Memory Total/Used/Free, GPU Manufacturer, GPU Renderer, and GPU Memory.
+Welcome to SIGU, the System Information Graphical Utility! With this small tool you can get the following information from your system: OS Device Name, OS Product Name, OS Kernel Name, OS Kernel Release, OS Architecture, CPU Processor, CPU Vendor, CPU Core Count, CPU Processor Count, Random-Access Memory Total / Used / Free, Swap Memory Total / Used / Free, GPU Manufacturer, GPU Renderer, and GPU Memory.
 
 # Platforms
 
