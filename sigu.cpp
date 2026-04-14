@@ -123,14 +123,14 @@ void string_send() {
 
 #if defined(_WIN32)
 static std::wstring widen(std::string str) {
-  if (str.empty()) return std::wstring(L"");
+  if (str.empty()) return L"";
   std::size_t wchar_count = str.size() + 1;
   std::vector<wchar_t> buf(wchar_count);
   return std::wstring{ buf.data(), (std::size_t)MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, buf.data(), (int)wchar_count) };
 }
 
 static std::string narrow(std::wstring wstr) {
-  if (wstr.empty()) return std::string("");
+  if (wstr.empty()) return "";
   int nbytes = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), nullptr, 0, nullptr, nullptr);
   std::vector<char> buf(nbytes);
   return std::string { buf.data(), (std::size_t)WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), buf.data(), nbytes, nullptr, nullptr) };
@@ -162,7 +162,7 @@ static std::string get_executable_path() {
   }
   #elif defined(__FreeBSD__) || defined(__DragonFly__)
   int mib[4]; 
-  size_t len = 0;
+  std::size_t len = 0;
   mib[0] = CTL_KERN;
   mib[1] = KERN_PROC;
   mib[2] = KERN_PROC_PATHNAME;
@@ -180,7 +180,7 @@ static std::string get_executable_path() {
   }
   #elif defined(__NetBSD__)
   int mib[4]; 
-  size_t len = 0;
+  std::size_t len = 0;
   mib[0] = CTL_KERN;
   mib[1] = KERN_PROC_ARGS;
   mib[2] = -1;
