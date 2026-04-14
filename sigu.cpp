@@ -326,7 +326,6 @@ static std::string get_executable_path() {
   }
   #endif
   return path;
-
 }
 
 static std::string filename_path(std::string fname) {
