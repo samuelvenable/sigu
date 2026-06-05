@@ -27,7 +27,7 @@
 #pragma once
 #include <string>
 
-namespace ngs::sys {
+namespace ngs::si {
 
 std::string os_kernel_name();
 std::string os_device_name();
@@ -50,4 +50,4 @@ std::string cpu_processor();
 std::string cpu_processor_count();
 std::string cpu_core_count();
 
-} // namespace ngs::sys
+} // namespace ngs::si
