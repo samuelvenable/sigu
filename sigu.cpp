@@ -60,7 +60,7 @@
 #include <kvm.h>
 #endif
 
-using namespace ngs::sys;
+using namespace ngs::si;
 
 #define SYSINFO std::string(((os_device_name() != std::string("(null)")) ? (std::string("OS DEVICE NAME: ") + os_device_name() + std::string("\n")) : "") +\
 ((os_product_name() != std::string("(null)")) ? (std::string("OS PRODUCT NAME: ") + os_product_name() + std::string("\n")) : "") +\
