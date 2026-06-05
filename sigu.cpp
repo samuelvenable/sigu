@@ -81,14 +81,14 @@ using namespace ngs::sys;
 ((gpu_renderer() != std::string("(null)")) ? (std::string("GPU RENDERER: ") + gpu_renderer() + std::string("\n")) : "") +\
 ((memory_totalvram(true) != std::string("(null)")) ? (std::string("GPU MEMORY: ") + memory_totalvram(true) + std::string("\n")) : ""))
 
-static std::string ppidenv;
+static std::string pidenv;
 static std::string pipeName;
 
 void string_send() {
   #if defined(_WIN32)
-  ppidenv = std::to_string(GetCurrentProcessId());
-  SetEnvironmentVariableA("IMGUI_DIALOG_PPID", ppidenv.c_str());
-  pipeName = std::string("\\\\.\\pipe\\IMGUI_DIALOG_PIPE_") + ppidenv;
+  pidenv = std::to_string(GetCurrentProcessId());
+  SetEnvironmentVariableA("IMGUI_DIALOG_PID", pidenv.c_str());
+  pipeName = std::string("\\\\.\\pipe\\IMGUI_DIALOG_PIPE_") + pidenv;
   HANDLE hPipe = CreateNamedPipeA(pipeName.c_str(), PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_NOWAIT, 1, 0, 0, 0, nullptr);
   if (hPipe == INVALID_HANDLE_VALUE) {
     return;
@@ -103,9 +103,9 @@ void string_send() {
   CloseHandle(hPipe);
   #else
   int fd = 0;
-  ppidenv = std::to_string(getpid());
-  setenv("IMGUI_DIALOG_PPID", ppidenv.c_str(), 1);
-  pipeName = std::string("/tmp/IMGUI_DIALOG_PIPE_") + ppidenv;
+  pidenv = std::to_string(getpid());
+  setenv("IMGUI_DIALOG_PID", pidenv.c_str(), 1);
+  pipeName = std::string("/tmp/IMGUI_DIALOG_PIPE_") + pidenv;
   if (mkfifo(pipeName.c_str(), 0666) != 0) {
     if (errno != EEXIST) {
       return;
