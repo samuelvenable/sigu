@@ -1321,8 +1321,11 @@ std::string gpu_renderer() {
   auto narrow = [](std::wstring wstr) {
     if (wstr.empty()) return std::string("");
     int nbytes = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), nullptr, 0, nullptr, nullptr);
-    std::vector<char> buf(nbytes);
-    return std::string { buf.data(), (std::size_t)WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), buf.data(), nbytes, nullptr, nullptr) };
+    if (!nbytes) return std::string("");
+    std::vector<char> buf((size_t)nbytes);
+    nbytes = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), buf.data(), nbytes, nullptr, nullptr);
+    if (!nbytes) return std::string("");
+    return std::string { buf.data(), (size_t)nbytes };
   };
   IDXGIFactory *pFactory = nullptr;
   if (CreateDXGIFactory(__uuidof(IDXGIFactory), (void **)&pFactory) == S_OK) {

@@ -3,7 +3,11 @@ cd "${0%/*}";
 rm -fr pci.ids pci.ids.hpp;
 curl --output pci.ids "https://pci-ids.ucw.cz/pci.ids";
 xxd -i pci.ids > pci.ids.hpp;
-rm -fr libfiledialogs && git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs && chmod 755 libfiledialogs/build.sh && libfiledialogs/build.sh;
+rm -fr libfiledialogs;
+git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs;
+rm -fr libfiledialogs/filedialogs/fonts/*;
+chmod 755 libfiledialogs/build.sh;
+libfiledialogs/build.sh;
 if [ $(uname -o) = "Msys" ]; then
   cp -fr libfiledialogs/filedialogs/filedialogs.exe filedialogs.exe;
   g++ sigu.cpp system.cpp -o sigu.exe -std=c++17 -static-libgcc -static-libstdc++ -lws2_32 -ldxgi -lpsapi -static -fPIC;
