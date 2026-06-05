@@ -62,7 +62,6 @@
 #include <mach/host_info.h>
 #include <mach/mach_host.h>
 #include <mach/mach_time.h>
-#include <mach-o/dyld.h>
 #include "shmem.hpp"
 #elif defined(__linux__)
 #include <sys/sysinfo.h>
