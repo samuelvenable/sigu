@@ -6,7 +6,7 @@ xxd -i pci.ids > pci.ids.hpp;
 rm -fr libfiledialogs;
 git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs;
 rm -fr libfiledialogs/filedialogs/fonts/*;
-chmod 755 libfiledialogs/build.sh;
+chmod u+x libfiledialogs/build.sh;
 libfiledialogs/build.sh;
 if [ `uname -o` = "Msys" ]; then
   cp -fr libfiledialogs/filedialogs/filedialogs.exe filedialogs.exe;
