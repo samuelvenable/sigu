@@ -45,8 +45,7 @@
 #include <climits>
 #endif
 #if (defined(__APPLE__) && defined(__MACH__))
-#include <sys/proc_info.h>
-#include <libproc.h>
+#include <mach-o/dyld.h>
 #endif
 #include <cstdlib>
 #if (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__))
