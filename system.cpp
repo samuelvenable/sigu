@@ -99,7 +99,7 @@
 #include "pci.ids.hpp"
 #include "system.hpp"
 
-namespace ngs::sys {
+namespace ngs::si {
 
 namespace {
 
@@ -1644,4 +1644,4 @@ std::string cpu_processor_count() {
   return pointer_null();
 }
 
-} // namespace ngs::sys
+} // namespace ngs::si
