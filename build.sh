@@ -5,7 +5,6 @@ curl --output pci.ids "https://pci-ids.ucw.cz/pci.ids";
 xxd -i pci.ids > pci.ids.hpp;
 rm -fr libfiledialogs;
 git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs;
-rm -fr libfiledialogs/filedialogs/fonts/*;
 chmod u+x libfiledialogs/build.sh;
 libfiledialogs/build.sh;
 if [ `uname -o` = "Msys" ]; then
