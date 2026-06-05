@@ -48,7 +48,7 @@
 #include <mach-o/dyld.h>
 #endif
 #include <cstdlib>
-#if (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__))
+#if ((defined(__FreeBSD__) || defined(__FreeBSD_kernel__)) || defined(__DragonFly__) || defined(__NetBSD__))
 #include <sys/sysctl.h>
 #if defined(__DragonFly__)
 #include <alloca.h>
@@ -188,7 +188,7 @@ static std::string get_executable_path() {
       path = exe;
     }
   }
-  #elif (defined(__linux__) || defined(__ANDROID__))
+  #elif defined(__linux__)
   char exe[PATH_MAX];
   if (realpath("/proc/self/exe", exe)) {
     path = exe;
