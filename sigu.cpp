@@ -444,8 +444,23 @@ bool env_var_exists(const char *name) {
 int main() {
   std::thread th(thloop);
   #if defined(_WIN32)
-  std::wstring dname = widen(filename_path(get_executable_path())); 
-  SetCurrentDirectoryW(dname.c_str());
+  std::wstring dname = widen(filename_path(get_executable_path())); SetCurrentDirectoryW(dname.c_str());
+  if (!env_var_exists("IMGUI_DIALOG_THEME")) SetEnvironmentVariableW(L"IMGUI_DIALOG_THEME", std::to_wstring(2).c_str());
+  if (!env_var_exists("IMGUI_TEXT_COLOR_0")) SetEnvironmentVariableW(L"IMGUI_TEXT_COLOR_0", std::to_wstring(1).c_str());
+  if (!env_var_exists("IMGUI_TEXT_COLOR_1")) SetEnvironmentVariableW(L"IMGUI_TEXT_COLOR_1", std::to_wstring(1).c_str());
+  if (!env_var_exists("IMGUI_TEXT_COLOR_2")) SetEnvironmentVariableW(L"IMGUI_TEXT_COLOR_2", std::to_wstring(1).c_str());
+  if (!env_var_exists("IMGUI_HEAD_COLOR_0")) SetEnvironmentVariableW(L"IMGUI_HEAD_COLOR_0", std::to_wstring(0.35).c_str());
+  if (!env_var_exists("IMGUI_HEAD_COLOR_1")) SetEnvironmentVariableW(L"IMGUI_HEAD_COLOR_1", std::to_wstring(0.55).c_str());
+  if (!env_var_exists("IMGUI_HEAD_COLOR_2")) SetEnvironmentVariableW(L"IMGUI_HEAD_COLOR_2", std::to_wstring(0.55).c_str());
+  if (!env_var_exists("IMGUI_AREA_COLOR_0")) SetEnvironmentVariableW(L"IMGUI_AREA_COLOR_0", std::to_wstring(0.18).c_str());
+  if (!env_var_exists("IMGUI_AREA_COLOR_1")) SetEnvironmentVariableW(L"IMGUI_AREA_COLOR_1", std::to_wstring(0.18).c_str());
+  if (!env_var_exists("IMGUI_AREA_COLOR_2")) SetEnvironmentVariableW(L"IMGUI_AREA_COLOR_2", std::to_wstring(0.18).c_str());
+  if (!env_var_exists("IMGUI_BODY_COLOR_0")) SetEnvironmentVariableW(L"IMGUI_BODY_COLOR_0", std::to_wstring(1).c_str());
+  if (!env_var_exists("IMGUI_BODY_COLOR_1")) SetEnvironmentVariableW(L"IMGUI_BODY_COLOR_1", std::to_wstring(1).c_str());
+  if (!env_var_exists("IMGUI_BODY_COLOR_2")) SetEnvironmentVariableW(L"IMGUI_BODY_COLOR_2", std::to_wstring(1).c_str());
+  if (!env_var_exists("IMGUI_POPS_COLOR_0")) SetEnvironmentVariableW(L"IMGUI_POPS_COLOR_0", std::to_wstring(0.07).c_str());
+  if (!env_var_exists("IMGUI_POPS_COLOR_1")) SetEnvironmentVariableW(L"IMGUI_POPS_COLOR_1", std::to_wstring(0.07).c_str());
+  if (!env_var_exists("IMGUI_POPS_COLOR_2")) SetEnvironmentVariableW(L"IMGUI_POPS_COLOR_2", std::to_wstring(0.07).c_str());
   if (!env_var_exists("IMGUI_DIALOG_CAPTION")) SetEnvironmentVariableW(L"IMGUI_DIALOG_CAPTION", L"About this Computer");
   if (!env_var_exists("IMGUI_DIALOG_PARENT")) SetEnvironmentVariableW(L"IMGUI_DIALOG_PARENT", L"");
   if (!env_var_exists("IMGUI_DIALOG_WIDTH")) SetEnvironmentVariableW(L"IMGUI_DIALOG_WIDTH", L"800");
@@ -467,12 +482,28 @@ int main() {
     }
   }
   #else
+  chdir(filename_path(get_executable_path()).c_str());
+  if (!env_var_exists("IMGUI_DIALOG_THEME")) setenv("IMGUI_DIALOG_THEME", std::to_string(2).c_str(), 1);
+  if (!env_var_exists("IMGUI_TEXT_COLOR_0")) setenv("IMGUI_TEXT_COLOR_0", std::to_string(1).c_str(), 1);
+  if (!env_var_exists("IMGUI_TEXT_COLOR_1")) setenv("IMGUI_TEXT_COLOR_1", std::to_string(1).c_str(), 1);
+  if (!env_var_exists("IMGUI_TEXT_COLOR_2")) setenv("IMGUI_TEXT_COLOR_2", std::to_string(1).c_str(), 1);
+  if (!env_var_exists("IMGUI_HEAD_COLOR_0")) setenv("IMGUI_HEAD_COLOR_0", std::to_string(0.35).c_str(), 1);
+  if (!env_var_exists("IMGUI_HEAD_COLOR_1")) setenv("IMGUI_HEAD_COLOR_1", std::to_string(0.55).c_str(), 1);
+  if (!env_var_exists("IMGUI_HEAD_COLOR_2")) setenv("IMGUI_HEAD_COLOR_2", std::to_string(0.55).c_str(), 1);
+  if (!env_var_exists("IMGUI_AREA_COLOR_0")) setenv("IMGUI_AREA_COLOR_0", std::to_string(0.18).c_str(), 1);
+  if (!env_var_exists("IMGUI_AREA_COLOR_1")) setenv("IMGUI_AREA_COLOR_1", std::to_string(0.18).c_str(), 1);
+  if (!env_var_exists("IMGUI_AREA_COLOR_2")) setenv("IMGUI_AREA_COLOR_2", std::to_string(0.18).c_str(), 1);
+  if (!env_var_exists("IMGUI_BODY_COLOR_0")) setenv("IMGUI_BODY_COLOR_0", std::to_string(1).c_str(), 1);
+  if (!env_var_exists("IMGUI_BODY_COLOR_1")) setenv("IMGUI_BODY_COLOR_1", std::to_string(1).c_str(), 1);
+  if (!env_var_exists("IMGUI_BODY_COLOR_2")) setenv("IMGUI_BODY_COLOR_2", std::to_string(1).c_str(), 1);
+  if (!env_var_exists("IMGUI_POPS_COLOR_0")) setenv("IMGUI_POPS_COLOR_0", std::to_string(0.07).c_str(), 1);
+  if (!env_var_exists("IMGUI_POPS_COLOR_1")) setenv("IMGUI_POPS_COLOR_1", std::to_string(0.07).c_str(), 1);
+  if (!env_var_exists("IMGUI_POPS_COLOR_2")) setenv("IMGUI_POPS_COLOR_2", std::to_string(0.07).c_str(), 1);
   if (!env_var_exists("IMGUI_DIALOG_CAPTION")) setenv("IMGUI_DIALOG_CAPTION", "About this Computer", 1);
   if (!env_var_exists("IMGUI_DIALOG_PARENT")) setenv("IMGUI_DIALOG_PARENT", "", 1);
   if (!env_var_exists("IMGUI_DIALOG_WIDTH")) setenv("IMGUI_DIALOG_WIDTH", "800", 1);
   if (!env_var_exists("IMGUI_FONT_FILES")) setenv("IMGUI_FONT_FILES", "fonts/Roboto/Roboto-Medium.ttf", 1);
   if (!env_var_exists("IMGUI_FONT_SIZE")) setenv("IMGUI_FONT_SIZE", "20", 1);
-  chdir(filename_path(get_executable_path()).c_str());
   chmod((filename_path(get_executable_path()) + "filedialogs").c_str(), S_IRWXU);
   if (system(nullptr) && !get_executable_path().empty() && get_executable_path() != filename_path(get_executable_path()) + "filedialogs") {
     system((std::string("\"") + filename_path(get_executable_path()) + std::string("filedialogs\" --show-message \"") +
