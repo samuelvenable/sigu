@@ -4,7 +4,7 @@ Welcome to SIGU, the System Information Graphical Utility! It is similar to [neo
 
 # Platforms
 
-Platforms: Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, and illumos.
+Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, and illumos.
 
 **Build Dependencies:**
 - Windows: git, curl, xxd, MSYS2, MinGW, pacman, g++, make, pkg-config, sdl2
