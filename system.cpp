@@ -1286,7 +1286,11 @@ std::string gpu_manufacturer() {
   PFNGLXQUERYCURRENTRENDERERSTRINGMESAPROC queryString;
   queryString = (PFNGLXQUERYCURRENTRENDERERSTRINGMESAPROC)glXGetProcAddressARB((const GLubyte *)"glXQueryCurrentRendererStringMESA");
   const GLubyte *vendor = (GLubyte *)queryString(GLX_RENDERER_VENDOR_ID_MESA);
-  gpuvendor = vendor ? (char *)vendor : "";
+  if (vendor) {
+    gpuvendor = std::string((char *)vendor);
+  } else {
+    gpuvendor = "";
+  }
   if (!gpuvendor.empty())
     return gpuvendor;
   #else
