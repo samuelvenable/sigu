@@ -1,0 +1,3 @@
+[submodule "libfiledialogs"]
+	path = libfiledialogs
+	url = https://github.com/samuelvenable/SDL3-ImGui-FileDialogs
