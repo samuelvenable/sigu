@@ -7,6 +7,7 @@ rm -fr filedialogs;
 git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs filedialogs;
 cd filedialogs;
 cmake . -DIFD_USE_BASIC_ICONS=ON;
+cmake --build .;
 cd ..;
 if [ `uname -o` = "Msys" ]; then
   cp -fr filedialogs/source/filedialogs.exe filedialogs.exe;
