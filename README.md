@@ -7,14 +7,14 @@ Welcome to SIGU, the System Information Graphical Utility! It is similar to [neo
 Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, and illumos.
 
 **Build Dependencies:**
-- Windows: git, curl, xxd, MSYS2, MinGW, pacman, g++, make, pkg-config, sdl2
-- macOS: git, curl, xxd, Xcode command line tools, MacPorts, clang++, make, sdl2
-- GNU/Linux: git, curl, xxd, g++, make, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
-- FreeBSD: git, curl, xxd, clang++, make, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
-- DragonFly BSD: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
-- NetBSD: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
-- OpenBSD: git, curl, xxd, clang++, make, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
-- Solaris: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
-- illumos: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, gtk+3.0, gio2.0, glib2.0, pkg-config, cmake
+- Windows: git, curl, xxd, {msys2, mingw}, g++, make, ninja, pkg-config, sdl2, cmake
+- macOS: git, curl, xxd, xcode command line tools, clang++, make, sdl2, pkg-config, cmake
+- GNU/Linux: git, curl, xxd, g++, make, opengl, sdl2, x11, pkg-config, cmake
+- FreeBSD: git, curl, xxd, clang++, make, opengl, sdl2, x11, pkg-config, cmake
+- DragonFly BSD: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, pkg-config, cmake
+- NetBSD: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, pkg-config, cmake
+- OpenBSD: git, curl, xxd, clang++, make, opengl, sdl2, x11, pkg-config, cmake
+- Solaris: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, pkg-config, cmake
+- illumos: git, curl, xxd, g++, make, hwloc, opengl, sdl2, x11, pkg-config, cmake
 
 ![screenshot.png](screenshot.png)
