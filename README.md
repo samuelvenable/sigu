@@ -7,7 +7,7 @@ Welcome to SIGU, the System Information Graphical Utility! It is similar to [neo
 Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, and illumos.
 
 **Build Dependencies:**
-- Windows: git, curl, xxd, {msys2, mingw}, g++, make, ninja, pkg-config, sdl2, cmake
+- Windows: git, curl, xxd, {msys2, mingw}, g++, ninja, pkg-config, sdl2, cmake
 - macOS: git, curl, xxd, xcode command line tools, clang++, make, sdl2, pkg-config, cmake
 - GNU/Linux: git, curl, xxd, g++, make, opengl, sdl2, x11, pkg-config, cmake
 - FreeBSD: git, curl, xxd, clang++, make, opengl, sdl2, x11, pkg-config, cmake
