@@ -29,6 +29,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #endif
+#include <apifilesystem/filesystem.hpp>
 #include <unordered_map>
 #include <algorithm>
 #include <iomanip>
@@ -200,9 +201,9 @@ the calling process hasn't already done this on its own ... */
 #if defined(CREATE_CONTEXT)
 bool create_context() {
   if (!window) {
-    SDL_setenv("SDL_VIDEODRIVER", "x11", 1);
+    ngs::fs::environment_set_variable("SDL_VIDEODRIVER", "x11");
     SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0");
-    if (SDL_Init(SDL_INIT_VIDEO))
+    if (!SDL_Init(SDL_INIT_VIDEO))
       return false;
     window = SDL_CreateWindow("", 1, 1, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
     if (!window) 
