@@ -4,7 +4,7 @@ rm -fr pci.ids pci.ids.hpp;
 curl --output pci.ids "https://pci-ids.ucw.cz/pci.ids";
 xxd -i pci.ids > pci.ids.hpp;
 rm -fr libfiledialogs;
-git clone https://github.com/samuelvenable/SDL2-ImGui-FileDialogs libfiledialogs;
+git clone https://github.com/samuelvenable/SDL3-ImGui-FileDialogs libfiledialogs;
 cd libfiledialogs;
 cmake . -DIFD_USE_BASIC_ICONS=ON;
 cmake --build .;
