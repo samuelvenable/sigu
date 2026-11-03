@@ -7,12 +7,12 @@ Welcome to SIGU, the System Information Graphical Utility! It is similar to [neo
 Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, and illumos.
 
 **Build Dependencies:**
-- Windows: git, curl, xxd, msys2, mingw, g++, ninja, pkg-config, sdl3, cmake
-- macOS: git, curl, xxd, xcode command line tools, clang++, make, sdl3, pkg-config, cmake
-- GNU/Linux: git, curl, xxd, g++, make, opengl, sdl3, x11, pkg-config, cmake
-- FreeBSD: git, curl, xxd, clang++, make, opengl, sdl3, x11, pkg-config, cmake
-- DragonFly BSD: git, curl, xxd, g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
-- NetBSD: git, curl, xxd, g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
-- OpenBSD: git, curl, xxd, clang++, make, opengl, sdl3, x11, pkg-config, cmake
-- Solaris: git, curl, xxd, g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
-- illumos: git, curl, xxd, g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
+- Windows: {{visual studio, msvc} or {msys2, mingw, g++, ninja}}, sdl3, cmake
+- macOS: {xcode command line tools, clang++, make}, sdl3, pkg-config, cmake
+- GNU/Linux: g++, make, opengl, sdl3, x11, pkg-config, cmake
+- FreeBSD: clang++, make, opengl, sdl3, x11, pkg-config, cmake
+- DragonFly BSD: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
+- NetBSD: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
+- OpenBSD: clang++, make, opengl, sdl3, x11, pkg-config, cmake
+- Solaris: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
+- illumos: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
