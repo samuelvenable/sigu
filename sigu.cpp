@@ -25,8 +25,8 @@
 */
 
 #include "system.hpp"
-#include "libfiledialogs/source/apifilesystem/filesysten.h"
-#include "libfiledialogs/source/apifiledialogs/filedialogs.h"
+#include <apifilesystem/filesysten.h>
+#include <apifiledialogs/filedialogs.h>
 #include <string>
 #include <sstream>
 #include <vector>
