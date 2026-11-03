@@ -44,8 +44,8 @@
 #include <cmath>
 #if (!defined(_WIN32) && (!defined(__APPLE__) && !defined(__MACH__)))
 #if defined(CREATE_CONTEXT)
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 #endif
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -204,7 +204,7 @@ bool create_context() {
     SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0");
     if (SDL_Init(SDL_INIT_VIDEO))
       return false;
-    window = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+    window = SDL_CreateWindow("", 1, 1, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
     if (!window) 
       return false;
     SDL_GLContext context = SDL_GL_CreateContext(window);
