@@ -153,11 +153,6 @@ int main() {
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_CAPTION")) ngs::fs::environment_set_variable("IMGUI_DIALOG_CAPTION", "About this Computer");
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_PARENT")) ngs::fs::environment_set_variable("IMGUI_DIALOG_PARENT", "");
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_WIDTH")) ngs::fs::environment_set_variable("IMGUI_DIALOG_WIDTH", std::to_string(800));
-  #if defined(_WIN32)
-  if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_FILES")) ngs::fs::environment_set_variable("IMGUI_FONT_FILES", ngs::fs::executable_get_directory() + "fonts\\Roboto\\Roboto-Medium.ttf");
-  #else
-  if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_FILES")) ngs::fs::environment_set_variable("IMGUI_FONT_FILES", ngs::fs::executable_get_directory() + "fonts/Roboto/Roboto-Medium.ttf");
-  #endif
   if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_SIZE")) ngs::fs::environment_set_variable("IMGUI_FONT_SIZE", std::to_string(20));
   ngs::im::show_message(SYSINFO);
   stop_thread = true;
