@@ -16,3 +16,5 @@ Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Sol
 - OpenBSD: clang++, make, opengl, sdl3, x11, pkg-config, cmake
 - Solaris: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
 - illumos: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
+
+![screenshot.png](screenshot.png)
