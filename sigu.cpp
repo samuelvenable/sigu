@@ -37,13 +37,13 @@
 #include <cstdlib>
 #include <cstring>
 #include <cerrno>
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #if defined(_WIN32)
 #include <windows.h>
 #else
+#include <unistd.h>
 #include <climits>
 #endif
 #if (defined(__APPLE__) && defined(__MACH__))
