@@ -17,4 +17,11 @@ Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Sol
 - Solaris: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
 - illumos: g++, make, hwloc, opengl, sdl3, x11, pkg-config, cmake
 
+# Screenshot
+
 ![screenshot.png](screenshot.png)
+
+# Notes
+
+- You are able to statically link SDL3 on all platforms except OpenBSD by passing `-DIFD_USE_CATALOG_PACKAGES=ON` to CMake.
+- Allow installation of the sigu build target by passing `-DSIGU_USE_INSTALL=ON` to CMake.
