@@ -72,7 +72,7 @@ static std::string pipeName;
 void string_send() {
   #if defined(_WIN32)
   pidEnv = std::to_string(GetCurrentProcessId());
-  SetEnvironmentVariableA("IMGUI_DIALOG_PID", pidEnv.c_str());
+  ngs::fs::environment_set_variable("IMGUI_DIALOG_PID", pidEnv);
   pipeName = std::string("\\\\.\\pipe\\IMGUI_DIALOG_PIPE_") + pidEnv;
   HANDLE hPipe = CreateNamedPipeA(pipeName.c_str(), PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_NOWAIT, 1, 0, 0, 0, nullptr);
   if (hPipe == INVALID_HANDLE_VALUE) {
@@ -89,7 +89,7 @@ void string_send() {
   #else
   int fd = 0;
   pidEnv = std::to_string(getpid());
-  setenv("IMGUI_DIALOG_PID", pidEnv.c_str(), 1);
+  ngs::fs::environment_set_variable("IMGUI_DIALOG_PID", pidEnv);
   pipeName = std::string("/tmp/IMGUI_DIALOG_PIPE_") + pidEnv;
   if (mkfifo(pipeName.c_str(), 0666) != 0) {
     if (errno != EEXIST) {
