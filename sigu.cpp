@@ -35,13 +35,13 @@
 #include <atomic>
 #include <cstdio>
 #include <cstdlib>
-#include <climits>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #if defined(_WIN32)
 #include <windows.h>
 #else
+#include <cerrno>
 #include <unistd.h>
 #endif
 
