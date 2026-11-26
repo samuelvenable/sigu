@@ -30,15 +30,12 @@
 #include <apifiledialogs/filedialogs.hpp>
 #endif
 #include <string>
-#include <sstream>
-#include <vector>
 #include <thread>
 #include <chrono>
 #include <atomic>
 #include <cstdio>
 #include <cstdlib>
-#include <cstring>
-#include <cerrno>
+#include <climits>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -46,22 +43,6 @@
 #include <windows.h>
 #else
 #include <unistd.h>
-#include <climits>
-#endif
-#if (defined(__APPLE__) && defined(__MACH__))
-#include <mach-o/dyld.h>
-#endif
-#include <cstdlib>
-#if ((defined(__FreeBSD__) || defined(__FreeBSD_kernel__)) || defined(__DragonFly__) || defined(__NetBSD__))
-#include <sys/sysctl.h>
-#if defined(__DragonFly__)
-#include <alloca.h>
-#endif
-#endif
-#if defined(__OpenBSD__)
-#include <cstddef>
-#include <sys/sysctl.h>
-#include <kvm.h>
 #endif
 
 using namespace ngs::si;
