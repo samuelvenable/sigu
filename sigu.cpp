@@ -26,7 +26,9 @@
 
 #include "system.hpp"
 #include <apifilesystem/filesystem.hpp>
+#if (!defined(_WIN32) && (!defined(__APPLE__) && !defined(__MACH__)))
 #include <apifiledialogs/filedialogs.hpp>
+#endif
 #include <string>
 #include <sstream>
 #include <vector>
@@ -122,6 +124,18 @@ void string_send() {
   #endif
 }
 
+#if (!defined(_WIN32) && (!defined(__APPLE__) && !defined(__MACH__)))
+static std::string string_replace_all(std::string str, std::string substr, std::string newstr) {
+  size_t pos = 0;
+  const size_t sublen = substr.length(), newlen = newstr.length();
+  while ((pos = str.find(substr, pos)) != std::string::npos) {
+    str.replace(pos, sublen, newstr);
+    pos += newlen;
+  }
+  return str;
+}
+#endif
+
 static std::atomic_bool stop_thread = false;
 static void thloop() {
   while (!stop_thread) {
@@ -154,7 +168,13 @@ int main() {
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_PARENT")) ngs::fs::environment_set_variable("IMGUI_DIALOG_PARENT", "");
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_WIDTH")) ngs::fs::environment_set_variable("IMGUI_DIALOG_WIDTH", std::to_string(800));
   if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_SIZE")) ngs::fs::environment_set_variable("IMGUI_FONT_SIZE", std::to_string(20));
+  #if (defined(_WIN32) || (defined(__APPLE__) && defined(__MACH__)))
   show_message((char *)SYSINFO.c_str());
+  #else
+  if (system(nullptr)) {
+    system((std::string("filedialogs --show-message \"") + string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
+  }
+  #endif
   stop_thread = true;
   th.join();
   stop_thread = false;
