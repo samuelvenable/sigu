@@ -26,22 +26,20 @@
 
 #include "system.hpp"
 #include <apifilesystem/filesystem.hpp>
-#if (defined(_WIN32) || (defined(__APPLE__) && defined(__MACH__)))
-#include <apifiledialogs/filedialogs.hpp>
-#endif
-#include <string>
-#include <thread>
-#include <chrono>
 #include <atomic>
+#include <chrono>
 #include <cstdio>
 #include <cstdlib>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+#include <string>
+#include <thread>
 #if defined(_WIN32)
+#include <vector>
 #include <windows.h>
 #else
 #include <cerrno>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #endif
 
@@ -105,7 +103,25 @@ void string_send() {
   #endif
 }
 
-#if (!defined(_WIN32) && (!defined(__APPLE__) && !defined(__MACH__)))
+#if defined(_WIN32)
+static std::wstring widen(std::string str) {
+  if (str.empty()) return L"";
+  std::size_t wchar_count = str.size() + 1;
+  std::vector<wchar_t> buf(wchar_count);
+  wchar_count = (std::size_t)MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, buf.data(), (int)wchar_count);
+  if (!wchar_count) return L"";
+  return std::wstring { buf.data(), wchar_count };
+}
+static std::wstring _wstring_replace_all(std::wstring str, std::wstring substr, std::wstring newstr) {
+  size_t pos = 0;
+  const size_t sublen = substr.length(), newlen = newstr.length();
+  while ((pos = str.find(substr, pos)) != std::wstring::npos) {
+    str.replace(pos, sublen, newstr);
+    pos += newlen;
+  }
+  return str;
+}
+#else
 static std::string string_replace_all(std::string str, std::string substr, std::string newstr) {
   size_t pos = 0;
   const size_t sublen = substr.length(), newlen = newstr.length();
@@ -149,10 +165,15 @@ int main() {
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_PARENT")) ngs::fs::environment_set_variable("IMGUI_DIALOG_PARENT", "");
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_WIDTH")) ngs::fs::environment_set_variable("IMGUI_DIALOG_WIDTH", std::to_string(800));
   if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_SIZE")) ngs::fs::environment_set_variable("IMGUI_FONT_SIZE", std::to_string(20));
-  #if (defined(_WIN32) || (defined(__APPLE__) && defined(__MACH__)))
-  show_message((char *)SYSINFO.c_str());
+  #if defined(_WIN32)
+  if (_wsystem(nullptr)) {
+    std::wstring _WSYSINFO = widen(SYSINFO);
+    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable_exists("PATH") + std::string(";") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
+    _wsystem((std::wstring(L"filedialogs --show-message \"") + _wstring_replace_all(_WSYSINFO, L"\"", L"\\\"") + std::wstring(L"\"")).c_str());
+  }
   #else
   if (system(nullptr)) {
+    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable_exists("PATH") + std::string(":") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
     system((std::string("filedialogs --show-message \"") + string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
   }
   #endif
