@@ -26,7 +26,7 @@
 
 #include "system.hpp"
 #include <apifilesystem/filesystem.hpp>
-#if (!defined(_WIN32) && (!defined(__APPLE__) && !defined(__MACH__)))
+#if (defined(_WIN32) || (defined(__APPLE__) && defined(__MACH__)))
 #include <apifiledialogs/filedialogs.hpp>
 #endif
 #include <string>
