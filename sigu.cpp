@@ -168,12 +168,12 @@ int main() {
   #if defined(_WIN32)
   if (_wsystem(nullptr)) {
     std::wstring _WSYSINFO = widen(SYSINFO);
-    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable_exists("PATH") + std::string(";") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
+    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(";") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
     _wsystem((std::wstring(L"filedialogs --show-message \"") + _wstring_replace_all(_WSYSINFO, L"\"", L"\\\"") + std::wstring(L"\"")).c_str());
   }
   #else
   if (system(nullptr)) {
-    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable_exists("PATH") + std::string(":") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
+    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(":") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
     system((std::string("filedialogs --show-message \"") + string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
   }
   #endif
