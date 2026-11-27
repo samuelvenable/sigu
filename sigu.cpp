@@ -166,14 +166,18 @@ int main() {
   if (!ngs::fs::environment_get_variable_exists("IMGUI_DIALOG_WIDTH")) ngs::fs::environment_set_variable("IMGUI_DIALOG_WIDTH", std::to_string(800));
   if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_SIZE")) ngs::fs::environment_set_variable("IMGUI_FONT_SIZE", std::to_string(20));
   #if defined(_WIN32)
-  if (_wsystem(nullptr)) {
+  if (_wsystem(nullptr) && !ngs::fs::executable_get_filename().empty() && ngs::fs::executable_get_filename() != "filedialogs.exe") {
     std::wstring _WSYSINFO = widen(SYSINFO);
-    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(";") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
-    _wsystem((std::wstring(L"filedialogs --show-message \"") + _wstring_replace_all(_WSYSINFO, L"\"", L"\\\"") + std::wstring(L"\"")).c_str());
+    std::string exedir = ngs::fs::executable_get_directory();
+    while (!exedir.empty() && (exedir.back() == '\\' || exedir.back() == '/')) exedir.pop_back();
+    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(";") + exedir);
+    _wsystem((std::wstring(L"filedialogs.exe --show-message \"") + _wstring_replace_all(_WSYSINFO, L"\"", L"\\\"") + std::wstring(L"\"")).c_str());
   }
   #else
-  if (system(nullptr)) {
-    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(":") + ngs::fs::executable_get_directory() + std::string("libfiledialogs"));
+  if (system(nullptr) && !ngs::fs::executable_get_filename().empty() && ngs::fs::executable_get_filename() != "filedialogs") {
+    std::string exedir = ngs::fs::executable_get_directory();
+    while (!exedir.empty() && exedir.back() == '/') exedir.pop_back();
+    ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(":") + exedir);
     system((std::string("filedialogs --show-message \"") + string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
   }
   #endif
