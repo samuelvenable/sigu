@@ -167,16 +167,14 @@ int main() {
   if (!ngs::fs::environment_get_variable_exists("IMGUI_FONT_SIZE")) ngs::fs::environment_set_variable("IMGUI_FONT_SIZE", std::to_string(20));
   #if defined(_WIN32)
   if (_wsystem(nullptr) && !ngs::fs::executable_get_filename().empty() && ngs::fs::executable_get_filename() != "filedialogs.exe") {
-    std::wstring _WSYSINFO = widen(SYSINFO);
-    std::string exedir = ngs::fs::executable_get_directory();
+    std::wstring _WSYSINFO = widen(SYSINFO); std::string exedir = ngs::fs::executable_get_directory();
     while (!exedir.empty() && (exedir.back() == '\\' || exedir.back() == '/')) exedir.pop_back();
     ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(";") + exedir);
     _wsystem((std::wstring(L"filedialogs.exe --show-message \"") + _wstring_replace_all(_WSYSINFO, L"\"", L"\\\"") + std::wstring(L"\"")).c_str());
   }
   #else
   if (system(nullptr) && !ngs::fs::executable_get_filename().empty() && ngs::fs::executable_get_filename() != "filedialogs") {
-    std::string exedir = ngs::fs::executable_get_directory();
-    while (!exedir.empty() && exedir.back() == '/') exedir.pop_back();
+    std::string exedir = ngs::fs::executable_get_directory(); while (!exedir.empty() && exedir.back() == '/') exedir.pop_back();
     ngs::fs::environment_set_variable("PATH", ngs::fs::environment_get_variable("PATH") + std::string(":") + exedir);
     system((std::string("filedialogs --show-message \"") + string_replace_all(SYSINFO, "\"", "\\\"") + std::string("\"")).c_str());
   }
