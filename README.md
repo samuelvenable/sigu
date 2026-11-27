@@ -20,7 +20,3 @@ Supports Windows, macOS, GNU/Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Sol
 # Screenshot
 
 ![screenshot.png](screenshot.png)
-
-# Notes
-
-- You are able to statically link SDL3 on all platforms except OpenBSD by passing `-DIFD_USE_CATALOG_PACKAGES=ON` to CMake.
